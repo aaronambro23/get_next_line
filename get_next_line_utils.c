@@ -6,7 +6,7 @@
 /*   By: aaambros <aaambros@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 16:19:20 by aaambros          #+#    #+#             */
-/*   Updated: 2024/01/08 14:18:10 by aaambros         ###   ########.fr       */
+/*   Updated: 2024/01/08 15:59:47 by aaambros         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,37 +22,41 @@ int	ft_strlen(const char *str)
 	return (count);
 }
 
-char	*ft_strdup(char *str)
+char	*ft_strdup(const char *s1)
 {
-	int		i;
-	int		size;
-	char	*duplicate;
+	char	*dup;
+	size_t	i;
 
+	dup = (char *)malloc(sizeof(char) * (ft_strlen(s1) + 1));
+	if (!s1)
+		return (NULL);
 	i = 0;
-	size = ft_strlen(str);
-	duplicate = malloc(sizeof(char) * (size + 1));
-	if (!duplicate)
-		return (0);
-	while (str[i])
+	if (!dup)
+		return (NULL);
+	while (s1[i])
 	{
-		duplicate[i] = str[i];
+		dup[i] = s1[i];
 		i++;
 	}
-	duplicate[i] = '\0';
-	return (duplicate);
+	dup[i] = '\0';
+	return (dup);
 }
 
-char	*ft_strchr(const char *s, int i)
+char	*ft_strchr(char *s, int c)
 {
-	while (*s)
+	int	i;
+
+	i = 0;
+	while (s[i] != '\0')
 	{
-		if (*s == i)
-			return ((char *)s);
-		s++;
+		if (s[i] == (char)c)
+			return (&s[i]);
+		i++;
 	}
-	if (i == '\0')
-		return ((char *)s);
-	return (0);
+	if (s[i] == (char)c)
+		return (&s[i]);
+	else
+		return (NULL);
 }
 
 char	*ft_substr(char const *s, unsigned int start, size_t len)

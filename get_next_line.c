@@ -6,7 +6,7 @@
 /*   By: aaambros <aaambros@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 16:20:43 by aaambros          #+#    #+#             */
-/*   Updated: 2024/01/08 14:23:05 by aaambros         ###   ########.fr       */
+/*   Updated: 2024/01/08 15:57:58 by aaambros         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,11 @@ char	*get_next_line(int fd)
 		return (0);
 	buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!buf)
+	{
+		free(buf);
+		buf = NULL;
 		return (NULL);
+	}
 	line = read_file_into_buffer(fd, buf, backup);
 	free(buf);
 	buf = NULL;
