@@ -6,7 +6,7 @@
 /*   By: aaambros <aaambros@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 16:20:43 by aaambros          #+#    #+#             */
-/*   Updated: 2023/12/27 16:20:46 by aaambros         ###   ########.fr       */
+/*   Updated: 2024/01/08 14:23:05 by aaambros         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,21 +45,21 @@ static char	*read_file_into_buffer(int fd, char *buf, char *backup)
 static char	*extract_line_from_buffer(char *line)
 {
 	size_t	count;
-	char	*backup;
+	char	*temp;
 
 	count = 0;
 	while (line[count] != '\n' && line[count] != '\0')
 		count++;
 	if (line[count] == '\0' || line[1] == '\0')
 		return (0);
-	backup = ft_substr(line, count + 1, ft_strlen(line) - count);
-	if (*backup == '\0')
+	temp = ft_substr(line, count + 1, ft_strlen(line) - count);
+	if (*temp == '\0')
 	{
-		free(backup);
-		backup = NULL;
+		free(temp);
+		temp = NULL;
 	}
 	line[count + 1] = '\0';
-	return (backup);
+	return (temp);
 }
 
 char	*get_next_line(int fd)

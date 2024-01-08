@@ -6,13 +6,13 @@
 /*   By: aaambros <aaambros@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 16:19:20 by aaambros          #+#    #+#             */
-/*   Updated: 2023/12/27 16:22:23 by aaambros         ###   ########.fr       */
+/*   Updated: 2024/01/08 14:18:10 by aaambros         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-int	ft_strlen(char *str)
+int	ft_strlen(const char *str)
 {
 	int	count;
 

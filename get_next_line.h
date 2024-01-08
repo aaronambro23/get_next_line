@@ -6,7 +6,7 @@
 /*   By: aaambros <aaambros@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 16:20:17 by aaambros          #+#    #+#             */
-/*   Updated: 2023/12/27 16:23:19 by aaambros         ###   ########.fr       */
+/*   Updated: 2024/01/08 14:18:46 by aaambros         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 //#include <stdlib.h> and <unistd.h> for *malloc(), free(), & read()*.
 
 char	*ft_substr(char const *s, unsigned int start, size_t len);
-int		ft_strlen(char *str);
+int		ft_strlen(const char *str);
 char	*ft_strchr(const char *s, int i);
 char	*ft_strdup(char *s);
 char	*ft_strjoin(char const *s1, char const *s2);
