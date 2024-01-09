@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: aaambros <aaambros@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/27 16:20:43 by aaambros          #+#    #+#             */
-/*   Updated: 2024/01/09 13:34:32 by aaambros         ###   ########.fr       */
+/*   Created: 2024/01/09 13:38:41 by aaambros          #+#    #+#             */
+/*   Updated: 2024/01/09 13:41:03 by aaambros         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,18 @@ static char	*extract_line_from_buffer(char *line)
 		free(temp);
 		temp = NULL;
 	}
-	line[count + 1] = '\0';
+	return (temp);
+}
+
+static char	*extract_line_from_backup(char *backup)
+{
+	size_t	count;
+	char	*temp;
+
+	count = 0;
+	while (backup[count] != '\n' && backup[count] != '\0')
+		count++;
+	temp = ft_substr(backup, 0, count + 1);
 	return (temp);
 }
 
@@ -73,15 +84,17 @@ char	*get_next_line(int fd)
 	buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!buf)
 	{
-		free(buf);
-		buf = NULL;
-		return (NULL);
+		free(backup);
+		backup = NULL;
+		return (0);
 	}
-	line = read_file_into_buffer(fd, buf, backup);
+	backup = read_file_into_buffer(fd, buf, backup);
 	free(buf);
-	buf = NULL;
-	if (!line)
-		return (NULL);
-	backup = extract_line_from_buffer(line);
+	if (!backup)
+		return (0);
+	line = extract_line_from_backup(backup);
+	buf = extract_line_from_buffer(backup);
+	free(backup);
+	backup = buf;
 	return (line);
 }
