@@ -6,7 +6,7 @@
 /*   By: aaambros <aaambros@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 16:20:43 by aaambros          #+#    #+#             */
-/*   Updated: 2024/01/09 13:34:32 by aaambros         ###   ########.fr       */
+/*   Updated: 2024/01/11 15:18:11 by aaambros         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,7 @@ static char	*read_file_into_buffer(int fd, char *buf, char *backup)
 		if (read_line == -1)
 		{
 			free(backup);
-			backup = NULL;
-			return (0);
+			return (NULL);
 		}
 		else if (read_line == 0)
 			break ;
@@ -68,20 +67,25 @@ char	*get_next_line(int fd)
 	char		*buf;
 	static char	*backup;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
-		return (0);
 	buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
-	if (!buf)
+	if (fd < 0 || BUFFER_SIZE <= 0 || fd >= 1024 || read(fd, 0, 0) < 0
+		|| fd == 1 || fd == 2)
 	{
 		free(buf);
+		free(backup);
 		buf = NULL;
+		backup = NULL;
 		return (NULL);
 	}
+	if (!buf)
+		return (NULL);
 	line = read_file_into_buffer(fd, buf, backup);
 	free(buf);
-	buf = NULL;
 	if (!line)
+	{
+		free(backup);
 		return (NULL);
+	}
 	backup = extract_line_from_buffer(line);
 	return (line);
 }
