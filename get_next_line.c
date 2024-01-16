@@ -89,3 +89,82 @@ char	*get_next_line(int fd)
 	backup = extract_line_from_buffer(line);
 	return (line);
 }
+
+
+static char	*readDataFromFile(int fileDescriptor, char *buffer, char *backupData)
+{
+	int		bytesRead;
+	char	*tempBuffer;
+
+	bytesRead = 1;
+	while (bytesRead != '\0')
+	{
+		bytesRead = read(fileDescriptor, buffer, BUFFER_SIZE);
+		if (bytesRead == -1)
+		{
+			free(backupData);
+			return (NULL);
+		}
+		else if (bytesRead == 0)
+			break ;
+		buffer[bytesRead] = '\0';
+		if (!backupData)
+			backupData = duplicateString("");
+		tempBuffer = joinStrings(backupData, buffer);
+		if (backupData)
+			free(backupData);
+		backupData = tempBuffer;
+		if (findCharacter(buffer, '\n'))
+			break ;
+	}
+	return (backupData);
+}
+
+static char	*extractLineFromData(char *data)
+{
+	size_t	characterCount;
+	char	*tempData;
+
+	characterCount = 0;
+	while (data[characterCount] != '\n' && data[characterCount] != '\0')
+		characterCount++;
+	if (data[characterCount] == '\0' || data[1] == '\0')
+		return (0);
+	tempData = getSubstring(data, characterCount + 1, getStringLength(data) - characterCount);
+	if (*tempData == '\0')
+	{
+		free(tempData);
+		tempData = NULL;
+	}
+	data[characterCount + 1] = '\0';
+	return (tempData);
+}
+
+char	*getNextLine(int fileDescriptor)
+{
+	char		*line;
+	char		*buffer;
+	static char	*backupData;
+
+	buffer = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	if (fileDescriptor < 0 || BUFFER_SIZE <= 0 || fileDescriptor >= 1024 || read(fileDescriptor, 0, 0) < 0
+		|| fileDescriptor == 1 || fileDescriptor == 2)
+	{
+		free(buffer);
+		free(backupData);
+		buffer = NULL;
+		backupData = NULL;
+		return (NULL);
+	}
+	if (!buffer)
+		return (NULL);
+	line = readDataFromFile(fileDescriptor, buffer, backupData);
+	free(buffer);
+	if (!line)
+	{
+		free(backupData);
+		return (NULL);
+	}
+	backupData = extractLineFromData(line);
+	return (line);
+}
