@@ -6,86 +6,86 @@
 /*   By: aaambros <aaambros@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 16:20:43 by aaambros          #+#    #+#             */
-/*   Updated: 2024/01/11 15:18:11 by aaambros         ###   ########.fr       */
+/*   Updated: 2024/01/22 12:19:16 by aaambros         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static char	*readDataFromFile(int fd, char *buffer, char *backupData)
+static char	*read_data_from_file(int fd, char *buffer, char *backup_data)
 {
-	int		bytesRead;
-	char	*tempBuff;
+	int		bytes_read;
+	char	*temp_buff;
 
-	bytesRead = 1;
-	while (bytesRead != '\0')
+	bytes_read = 1;
+	while (bytes_read != '\0')
 	{
-		bytesRead = read(fd, buffer, BUFFER_SIZE);
-		if (bytesRead == -1)
+		bytes_read = read(fd, buffer, BUFFER_SIZE);
+		if (bytes_read == -1)
 		{
-			free(backupData);
+			free(backup_data);
 			return (NULL);
 		}
-		else if (bytesRead == 0)
+		else if (bytes_read == 0)
 			break ;
-		buf[bytesRead] = '\0';
-		if (!backupData)
-			backupData = ft_strdup("");
-		tempBuff = ft_strjoin(backupData, buffer);
-		if (backupData)
-			free(backupData);
-		backupData = tempBuff;
+		buffer[bytes_read] = '\0';
+		if (!backup_data)
+			backup_data = ft_strdup("");
+		temp_buff = ft_strjoin(backup_data, buffer);
+		if (backup_data)
+			free(backup_data);
+		backup_data = temp_buff;
 		if (ft_strchr(buffer, '\n'))
 			break ;
 	}
-	return (backupData);
+	return (backup_data);
 }
 
-static char	*extractLineFromData(char *data)
+static char	*extract_line_from_data(char *data)
 {
-	size_t	charCount;
-	char	*tempData;
+	size_t	char_count;
+	char	*temp_data;
 
-	charCount = 0;
-	while (data[charCount] != '\n' && data[charCount] != '\0')
-		charCount++;
-	if (data[charCount] == '\0' || data[1] == '\0')
+	char_count = 0;
+	while (data[char_count] != '\n' && data[char_count] != '\0')
+		char_count++;
+	if (data[char_count] == '\0' || data[1] == '\0')
 		return (0);
-	tempData = ft_substr(data, charCount + 1, ft_strlen(data) - charCount);
-	if (*tempData == '\0')
+	temp_data = ft_substr(data, char_count + 1, ft_strlen(data) - char_count);
+	if (*temp_data == '\0')
 	{
-		free(tempData);
-		tempData = NULL;
+		free(temp_data);
+		temp_data = NULL;
 	}
-	data[charCount + 1] = '\0';
-	return (tempData);
+	data[char_count + 1] = '\0';
+	return (temp_data);
 }
 
 char	*get_next_line(int fd)
 {
 	char		*line;
 	char		*buffer;
-	static char	*backupData;
+	static char	*backup_data;
 
 	buffer = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (fd < 0 || BUFFER_SIZE <= 0 || fd >= 1024 || read(fd, 0, 0) < 0
 		|| fd == 1 || fd == 2)
 	{
 		free(buffer);
-		free(backupData);
+		free(backup_data);
 		buffer = NULL;
-		backupData = NULL;
+		backup_data = NULL;
 		return (NULL);
 	}
 	if (!buffer)
 		return (NULL);
-	line = readDataFromFile(fd, buffer, backupData);
+	line = read_data_from_file(fd, buffer, backup_data);
 	free(buffer);
 	if (!line)
 	{
-		free(backupData);
+		free(backup_data);
 		return (NULL);
 	}
-	backupData = extract_line_from_buffer(line);
+	backup_data = extract_line_from_data(line);
 	return (line);
 }
